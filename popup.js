@@ -41,22 +41,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Load user preferences from storage and apply them initially
     chrome.storage.sync.get(['theme', 'formatting'], function (result) {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            console.log("Sending ping message from popup.js");
-            chrome.tabs.sendMessage(tabs[0].id, { action: 'ping' }, function (response) {
-                if (chrome.runtime.lastError) {
-                    console.error("Error sending ping:", chrome.runtime.lastError.message);
-                } else {
-                    console.log("Received ping response in popup.js:", response);
-                    // Content script is ready, apply preferences
-                    if (result.theme) {
-                        chrome.tabs.sendMessage(tabs[0].id, { action: 'applyTheme', theme: result.theme });
+        function sendPing() {
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                console.log("Sending ping message from popup.js");
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'ping' }, function (response) {
+                    if (chrome.runtime.lastError) {
+                        // If there's an error, retry after a short delay
+                        setTimeout(sendPing, 500); // Retry after 500 milliseconds
+                    } else {
+                        console.log("Received ping response in popup.js:", response);
+                        // Content script is ready, apply preferences
+                        if (result.theme) {
+                            chrome.tabs.sendMessage(tabs[0].id, { action: 'applyTheme', theme: result.theme });
+                        }
+                        if (result.formatting) {
+                            chrome.tabs.sendMessage(tabs[0].id, { action: 'applyFormatting', formatting: result.formatting });
+                        }
                     }
-                    if (result.formatting) {
-                        chrome.tabs.sendMessage(tabs[0].id, { action: 'applyFormatting', formatting: result.formatting });
-                    }
-                }
+                });
             });
-        });
+        }
+
+        // Start by sending the initial ping
+        sendPing();
     });
 });

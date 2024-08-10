@@ -64,35 +64,32 @@ function extractJSONContent() {
     }
   }
   
-  // Signal readiness when the content script is loaded
+  // Signal readiness when the content script and JSONViewer library are loaded
   document.addEventListener('DOMContentLoaded', function() {
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      if (request.action === 'ping') {
-        console.log("Received ping message in content.js"); // Add logging
-        sendResponse({status: 'ready'});
-      } else if (request.action === 'applyFormatting') {
-        console.log("Received applyFormatting message in content.js with formatting:", request.formatting); // Add logging
-        applyFormatting(request.formatting);
-        sendResponse({ success: true });
-      } else if (request.action === 'applyTheme') {
-        console.log("Received applyTheme message in content.js with theme:", request.theme); // Add logging
-        applyTheme(request.theme);
-        sendResponse({ success: true });
+    var script = document.createElement('script');
+    script.src = chrome.runtime.getURL('lib/json-viewer.min.js');
+    script.onload = function() {
+      chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        if (request.action === 'ping') {
+          console.log("Received ping message in content.js");
+          sendResponse({status: 'ready'});
+        } else if (request.action === 'applyFormatting') {
+          console.log("Received applyFormatting message in content.js with formatting:", request.formatting);
+          applyFormatting(request.formatting);
+          sendResponse({ success: true });
+        } else if (request.action === 'applyTheme') {
+          console.log("Received applyTheme message in content.js with theme:", request.theme);
+          applyTheme(request.theme);
+          sendResponse({ success: true });
+        }
+      });
+  
+      // Trigger initial formatting when a JSON file is opened
+      if (window.location.href.endsWith('.json')) {
+        applyFormatting('formattedRaw');
       }
-    });
+    };
+    document.head.appendChild(script);
   });
   
-  // Dynamically inject the JSONViewer library
-  var script = document.createElement('script');
-  script.src = chrome.runtime.getURL('lib/json-viewer.min.js'); 
-  script.onload = function() {
-    // Now that JSONViewer is loaded, trigger initial formatting if applicable
-    console.log("JSONViewer library loaded in content.js"); // Add logging
-  
-    // Trigger initial formatting when a JSON file is opened
-    if (window.location.href.endsWith('.json')) {
-      applyFormatting('formattedRaw'); 
-    }
-  };
-  document.head.appendChild(script); 
   
