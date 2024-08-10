@@ -55,4 +55,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             chrome.tabs.sendMessage(tabs[0].id, { action: 'applyTheme', theme: result.theme });
                         }
                         if (result.formatting) {
-                            chrome.tabs.sendMessage(tabs[0].id, { action: 'applyFormatting', formatting: result
+                            chrome.tabs.sendMessage(tabs[0].id, { action: 'applyFormatting', formatting: result.formatting });
+                        }
+                    }
+                });
+            });
+        }
+
+        // Start by sending the initial ping
+        sendPing();
+    });
+});
