@@ -28,6 +28,15 @@ function extractJSONContent() {
         container.id = 'jsonViewerContainer';
         document.body.appendChild(container);
   
+        // Inject the JSONViewer CSS if it's not already present
+        if (!document.getElementById('jsonViewerCSS')) {
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.id = 'jsonViewerCSS'; 
+          link.href = chrome.runtime.getURL('lib/json-viewer.css');
+          document.head.appendChild(link);
+        }
+  
         const myJSONViewer = new JSONViewer({
           container,
           data: parsedJSON,
