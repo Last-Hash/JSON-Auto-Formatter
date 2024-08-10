@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "JSON Auto Formatter",
+    "version": "1.0",
+    "description": "Auto-formats JSON files and provides a toolbar with formatting options and themes.",
+    "permissions": [
+      "activeTab",
+      "storage"
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  

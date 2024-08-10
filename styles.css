@@ -1,0 +1,117 @@
+/* Basic toolbar styling */
+.toolbar {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #f0f0f0;
+    /* Light gray background */
+    border-bottom: 1px solid #ccc;
+    /* Subtle bottom border */
+}
+
+.toolbar button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #e0e0e0;
+    /* Slightly darker gray for buttons */
+    color: #333;
+    /* Dark text color */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    /* Smooth transition on hover */
+}
+
+.toolbar button:hover {
+    background-color: #d0d0d0;
+    /* Even darker gray on hover */
+}
+
+/* JSONViewer styling */
+#jsonViewerContainer {
+    padding: 20px;
+    font-family: monospace;
+    /* Use a monospace font for better readability */
+}
+
+.jv-key {
+    color: #007bff;
+    /* Blue color for keys */
+}
+
+.jv-value {
+    color: #28a745;
+    /* Green color for values */
+}
+
+.jv-string {
+    color: #dc3545;
+    /* Red color for strings */
+}
+
+.jv-number {
+    color: #fd7e14;
+    /* Orange color for numbers */
+}
+
+.jv-boolean {
+    color: #17a2b8;
+    /* Teal color for booleans */
+}
+
+.jv-null {
+    color: #6c757d;
+    /* Gray color for null values */
+}
+
+/* Dark mode styles */
+body.dark-mode .toolbar {
+    background-color: #333;
+    /* Dark background for toolbar */
+    border-bottom: 1px solid #555;
+    /* Darker border */
+}
+
+body.dark-mode .toolbar button {
+    background-color: #555;
+    /* Darker button background */
+    color: #eee;
+    /* Light text color */
+}
+
+body.dark-mode #jsonViewerContainer {
+    background-color: #222;
+    /* Dark background for JSONViewer */
+    color: #eee;
+    /* Light text color */
+}
+
+body.dark-mode .jv-key {
+    color: #00ffff;
+    /* Cyan color for keys in dark mode */
+}
+
+body.dark-mode .jv-value {
+    color: #90ee90;
+    /* Light green color for values in dark mode */
+}
+
+body.dark-mode .jv-string {
+    color: #ffa07a;
+    /* Light salmon color for strings in dark mode */
+}
+
+body.dark-mode .jv-number {
+    color: #ffd700;
+    /* Gold color for numbers in dark mode */
+}
+
+body.dark-mode .jv-boolean {
+    color: #add8e6;
+    /* Light blue color for booleans in dark mode */
+}
+
+body.dark-mode .jv-null {
+    color: #aaaaaa;
+    /* Light gray color for null values in dark mode */
+}
