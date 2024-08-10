@@ -22,8 +22,12 @@ function extractJSONContent() {
         container.id = 'jsonViewerContainer';
         document.body.appendChild(container);
   
-        let viewer = new JSONViewer();
-        viewer.showJSON(parsedJSON, container);
+        const myJSONViewer = new JSONViewer({
+          container,
+          data: parsedJSON,
+          theme: 'light',
+          expand: false
+        });
       } else if (formatting === 'formattedRaw') {
         let formattedJSON = JSON.stringify(parsedJSON, null, 2);
         document.body.textContent = formattedJSON;
