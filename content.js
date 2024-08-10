@@ -64,33 +64,35 @@ function extractJSONContent() {
     }
   }
   
-  // Wait for the DOM to be fully loaded before injecting the JSONViewer library and handling messages
+  // Signal readiness when the content script is loaded
   document.addEventListener('DOMContentLoaded', function() {
-    // Dynamically inject the JSONViewer library
-    var script = document.createElement('script');
-    script.src = chrome.runtime.getURL('lib/json-viewer.min.js');
-    script.onload = function() {
-      // Now that JSONViewer is loaded, handle messages and initial formatting
-  
-      // Listen for messages from the toolbar (popup.js)
-      chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-        if (request.action === 'ping') {
-          sendResponse({status: 'ready'});
-        } else if (request.action === 'applyFormatting') {
-          applyFormatting(request.formatting);
-          sendResponse({ success: true });
-        } else if (request.action === 'applyTheme') {
-          applyTheme(request.theme);
-          sendResponse({ success: true });
-        }
-      });
-  
-      // Trigger initial formatting when a JSON file is opened
-      if (window.location.href.endsWith('.json')) {
-        applyFormatting('formattedRaw');
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+      if (request.action === 'ping') {
+        console.log("Received ping message in content.js"); // Add logging
+        sendResponse({status: 'ready'});
+      } else if (request.action === 'applyFormatting') {
+        console.log("Received applyFormatting message in content.js with formatting:", request.formatting); // Add logging
+        applyFormatting(request.formatting);
+        sendResponse({ success: true });
+      } else if (request.action === 'applyTheme') {
+        console.log("Received applyTheme message in content.js with theme:", request.theme); // Add logging
+        applyTheme(request.theme);
+        sendResponse({ success: true });
       }
-    };
-    document.head.appendChild(script); 
+    });
   });
   
+  // Dynamically inject the JSONViewer library
+  var script = document.createElement('script');
+  script.src = chrome.runtime.getURL('lib/json-viewer.min.js'); 
+  script.onload = function() {
+    // Now that JSONViewer is loaded, trigger initial formatting if applicable
+    console.log("JSONViewer library loaded in content.js"); // Add logging
+  
+    // Trigger initial formatting when a JSON file is opened
+    if (window.location.href.endsWith('.json')) {
+      applyFormatting('formattedRaw'); 
+    }
+  };
+  document.head.appendChild(script); 
   

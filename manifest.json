@@ -15,6 +15,12 @@
         "matches": ["*://*/*"],
         "js": ["content.js"]
       }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["lib/json-viewer.min.js"],
+        "matches": ["*://*/*"] 
+      }
     ]
   }
   
