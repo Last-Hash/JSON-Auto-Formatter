@@ -64,27 +64,33 @@ function extractJSONContent() {
     }
   }
   
-  // Dynamically inject the JSONViewer library
-  var script = document.createElement('script');
-  script.src = chrome.runtime.getURL('lib/json-viewer.min.js'); 
-  script.onload = function() {
-    // Now that JSONViewer is loaded, handle messages and initial formatting
+  // Wait for the DOM to be fully loaded before injecting the JSONViewer library and handling messages
+  document.addEventListener('DOMContentLoaded', function() {
+    // Dynamically inject the JSONViewer library
+    var script = document.createElement('script');
+    script.src = chrome.runtime.getURL('lib/json-viewer.min.js');
+    script.onload = function() {
+      // Now that JSONViewer is loaded, handle messages and initial formatting
   
-    // Listen for messages from the toolbar (popup.js)
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      if (request.action === 'applyFormatting') {
-        applyFormatting(request.formatting);
-        sendResponse({ success: true });
-      } else if (request.action === 'applyTheme') {
-        applyTheme(request.theme);
-        sendResponse({ success: true });
+      // Listen for messages from the toolbar (popup.js)
+      chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        if (request.action === 'ping') {
+          sendResponse({status: 'ready'});
+        } else if (request.action === 'applyFormatting') {
+          applyFormatting(request.formatting);
+          sendResponse({ success: true });
+        } else if (request.action === 'applyTheme') {
+          applyTheme(request.theme);
+          sendResponse({ success: true });
+        }
+      });
+  
+      // Trigger initial formatting when a JSON file is opened
+      if (window.location.href.endsWith('.json')) {
+        applyFormatting('formattedRaw');
       }
-    });
+    };
+    document.head.appendChild(script); 
+  });
   
-    // Trigger initial formatting when a JSON file is opened
-    if (window.location.href.endsWith('.json')) {
-      applyFormatting('formattedRaw'); 
-    }
-  };
-  document.head.appendChild(script); 
   
