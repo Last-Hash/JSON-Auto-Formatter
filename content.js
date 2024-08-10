@@ -5,12 +5,18 @@ function extractJSONContent() {
       return preTags[0].textContent;
     }
   
-    return document.body.textContent;
+    return document.body.textContent; 
   }
   
   // Function to apply formatting to the JSON content
   function applyFormatting(formatting) {
     let jsonContent = extractJSONContent();
+  
+    // Check if jsonContent is valid JSON before parsing
+    if (!isJsonValid(jsonContent)) {
+      alert("Invalid JSON: The extracted content is not valid JSON.");
+      return; 
+    }
   
     try {
       let parsedJSON = JSON.parse(jsonContent);
@@ -35,7 +41,17 @@ function extractJSONContent() {
         document.body.textContent = jsonContent;
       }
     } catch (error) {
-      alert("Invalid JSON: " + error.message);
+      alert("Error parsing JSON: " + error.message); 
+    }
+  }
+  
+  // Function to validate JSON 
+  function isJsonValid(jsonString) {
+    try {
+      JSON.parse(jsonString);
+      return true;
+    } catch (error) {
+      return false;
     }
   }
   
@@ -48,19 +64,27 @@ function extractJSONContent() {
     }
   }
   
-  // Listen for messages from the toolbar (popup.js)
-  chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action === 'applyFormatting') {
-      applyFormatting(request.formatting);
-      sendResponse({ success: true });
-    } else if (request.action === 'applyTheme') {
-      applyTheme(request.theme);
-      sendResponse({ success: true });
-    }
-  });
+  // Dynamically inject the JSONViewer library
+  var script = document.createElement('script');
+  script.src = chrome.runtime.getURL('lib/json-viewer.min.js'); 
+  script.onload = function() {
+    // Now that JSONViewer is loaded, handle messages and initial formatting
   
-  // Trigger initial formatting when a JSON file is opened
-  if (window.location.href.endsWith('.json')) {
-    applyFormatting('formattedRaw'); 
-  }
+    // Listen for messages from the toolbar (popup.js)
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+      if (request.action === 'applyFormatting') {
+        applyFormatting(request.formatting);
+        sendResponse({ success: true });
+      } else if (request.action === 'applyTheme') {
+        applyTheme(request.theme);
+        sendResponse({ success: true });
+      }
+    });
+  
+    // Trigger initial formatting when a JSON file is opened
+    if (window.location.href.endsWith('.json')) {
+      applyFormatting('formattedRaw'); 
+    }
+  };
+  document.head.appendChild(script); 
   
