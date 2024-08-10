@@ -18,7 +18,7 @@
     ],
     "web_accessible_resources": [
       {
-        "resources": ["lib/json-viewer.min.js"],
+        "resources": ["lib/json-viewer.min.js", "lib/json-viewer.css"],
         "matches": ["*://*/*"] 
       }
     ]
