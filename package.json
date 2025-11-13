@@ -1,0 +1,38 @@
+{
+  "name": "json-auto-formatter",
+  "displayName": "JSON Auto Formatter",
+  "version": "2.0.0",
+  "description": "Modern JSON formatter with advanced features, themes, and editing capabilities",
+  "author": "ProgrammerNomad <shiv@srapsware.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development vite build --watch --mode development",
+    "dev:once": "cross-env NODE_ENV=development vite build --mode development",
+    "build": "cross-env NODE_ENV=production tsc && vite build --mode production",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "format": "prettier --write src/**/*.{ts,tsx,css}"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.400.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "cross-env": "^10.1.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
+    "vite-plugin-web-extension": "^4.1.4"
+  }
+}
